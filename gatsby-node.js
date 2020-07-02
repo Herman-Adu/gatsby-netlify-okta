@@ -36,3 +36,34 @@ exports.createPages = async ({actions, graphql, reporter}) => {
     })
   })
 };
+
+/*
+    Since this section will have dynamic content that shouldn’t be rendered statically, you need to exclude it from the build    
+        if the path matches /account do nothing
+*/
+
+exports.onCreatePage = async ({ page, actions }) => {
+    const { createPage } = actions;
+    if (page.path.match(/^\/account/)) {
+      page.matchPath = "/account/*";
+      createPage(page)
+    }
+};
+
+//  exclude the okta-sign-in widget as a dependcy from the compilation process other you get errors when doing gatsby build
+
+exports.onCreateWebpackConfig = ({ stage, loaders, actions }) => {
+    if (stage === 'build-html') {
+      // Exclude Sign-In Widget from compilation path
+      actions.setWebpackConfig({
+        module: {
+          rules: [
+            {
+              test: /okta-sign-in/,
+              use: loaders.null(),
+            }
+          ],
+        },
+      })
+    }
+  };
