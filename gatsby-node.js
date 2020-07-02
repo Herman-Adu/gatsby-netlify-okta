@@ -39,7 +39,8 @@ exports.createPages = async ({actions, graphql, reporter}) => {
 
 /*
     Since this section will have dynamic content that shouldn’t be rendered statically, you need to exclude it from the build    
-        if the path matches /account do nothing
+    
+    if the path matches /account do nothing
 */
 
 exports.onCreatePage = async ({ page, actions }) => {
